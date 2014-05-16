@@ -1,37 +1,10 @@
 $(function(){
-  var my_parser = new parser()
-  $('body').append(my_parser.parseObject(data))
+  var myParser = new parser()
+  $('body').append(myParser.parseObject(data))
 })
-var parser = function(){
-
-}
+var parser = function(){}
 parser.prototype = {
-  parseObject : function(obj){
-    var result = ["<ul>"]
-    for (var key in obj){
-      result.push("<li>")
-      result.push(key)
-      result.push(this.parseArray(obj[key]))
-      result.push("</li>")
-    }
-    result.push("</ul>")
-    return result.join("")
-  },
-  parseArray : function(arr){
-    var result = ["<ul>"]
-    for (var i = 0; i < arr.length; i++){
-      if (typeof(arr[i]) == "object"){
-        result.push(this.parseInnerObject(arr[i]))
-      } else {
-        result.push("<li>")
-        result.push(arr[i])
-        result.push("</li>")
-      }
-    }
-    result.push("</ul>")
-    return result.join("")
-  },
-  parseInnerObject : function(obj){
+  parseObject : function(obj, inner){
     var result = []
     for (var key in obj){
       result.push("<li>")
@@ -39,7 +12,29 @@ parser.prototype = {
       result.push(this.parseArray(obj[key]))
       result.push("</li>")
     }
-    return result.join("")
+    if (inner){
+      return result.join("")
+    } else {
+      return this.joinUL(result)
+    }
+  },
+  parseArray : function(arr){
+    var result = []
+    for (var i = 0; i < arr.length; i++){
+      if (typeof(arr[i]) == "object"){
+        result.push(this.parseObject(arr[i], true))
+      } else {
+        result.push("<li>")
+        result.push(arr[i])
+        result.push("</li>")
+      }
+    }
+    return this.joinUL(result)
+  },
+  joinUL : function(toJoin){
+    toJoin.unshift("<ul>")
+    toJoin.push("</ul>")
+    return toJoin.join("")
   }
 }
 

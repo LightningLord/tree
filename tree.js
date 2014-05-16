@@ -1,42 +1,42 @@
 $(function(){
-  var myParser = new parser()
-  $('body').append(myParser.parseObject(data))
+  $('body').append(new parser().parseObject(data))
 })
-var parser = function(){}
-parser.prototype = {
-  parseObject : function(obj, inner){
+var parser = function(){
+  function uListify(toJoin){
+    toJoin.unshift("<ul>")
+    toJoin.push("</ul>")
+    return toJoin.join("")
+  }
+  function listItemify(item){
+    item.unshift("<li>")
+    item.push("</li>")
+    return item
+  }
+
+  this.parseObject = function(obj, inner){
     var result = []
     for (var key in obj){
-      result = result.concat(this.makeListItem([key, this.parseArray(obj[key])]))
+      result = result.concat(listItemify([key, this.parseArray(obj[key])]))
     }
     if (inner){
       return result.join("")
     } else {
-      return this.joinUL(result)
+      return uListify(result)
     }
   },
-  parseArray : function(arr){
+  this.parseArray = function(arr){
     var result = []
     for (var i = 0; i < arr.length; i++){
       if (typeof(arr[i]) == "object"){
         result.push(this.parseObject(arr[i], true))
       } else {
-        result = result.concat(this.makeListItem([arr[i]]))
+        result = result.concat(listItemify([arr[i]]))
       }
     }
-    return this.joinUL(result)
-  },
-  joinUL : function(toJoin){
-    toJoin.unshift("<ul>")
-    toJoin.push("</ul>")
-    return toJoin.join("")
-  },
-  makeListItem : function(item){
-    item.unshift("<li>")
-    item.push("</li>")
-    return item
+    return uListify(result)
   }
 }
+
 
 
 var data = {

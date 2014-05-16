@@ -7,10 +7,7 @@ parser.prototype = {
   parseObject : function(obj, inner){
     var result = []
     for (var key in obj){
-      result.push("<li>")
-      result.push(key)
-      result.push(this.parseArray(obj[key]))
-      result.push("</li>")
+      result = result.concat(this.makeListItem([key, this.parseArray(obj[key])]))
     }
     if (inner){
       return result.join("")
@@ -24,9 +21,7 @@ parser.prototype = {
       if (typeof(arr[i]) == "object"){
         result.push(this.parseObject(arr[i], true))
       } else {
-        result.push("<li>")
-        result.push(arr[i])
-        result.push("</li>")
+        result = result.concat(this.makeListItem([arr[i]]))
       }
     }
     return this.joinUL(result)
@@ -35,6 +30,11 @@ parser.prototype = {
     toJoin.unshift("<ul>")
     toJoin.push("</ul>")
     return toJoin.join("")
+  },
+  makeListItem : function(item){
+    item.unshift("<li>")
+    item.push("</li>")
+    return item
   }
 }
 

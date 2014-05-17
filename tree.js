@@ -8,7 +8,7 @@ var interactor = function(){}
 interactor.prototype = {
   bind: function(elem){
     elem.on("click", function(){
-      $(this).children().show()
+      $(this).children().show(500)
     })
   }
 }

@@ -1,8 +1,6 @@
 tree
 ====
 
-render a tree
+takes JSON data and renders it as a nested list. 
 
-master is an implementation using prototypical inheritance
-
-branch with_closures is an implementation that uses closures to hide behavior 
+clicking an element will expose its children, if any

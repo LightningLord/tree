@@ -1,12 +1,12 @@
 $(function(){
   $('body').append(new parser().parseObject(data))
   $('ul ul').hide()
-  new interactor().bindHover($('li'))
+  new interactor().bind($('li'))
 })
 var interactor = function(){}
 
 interactor.prototype = {
-  bindHover : function(elem){
+  bind: function(elem){
     elem.on("click", function(){
       $(this).children().show()
     })

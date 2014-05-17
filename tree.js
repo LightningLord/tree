@@ -1,6 +1,18 @@
 $(function(){
   $('body').append(new parser().parseObject(data))
+  $('ul ul').hide()
+  new interactor().bindHover($('li'))
 })
+var interactor = function(){}
+
+interactor.prototype = {
+  bindHover : function(elem){
+    elem.on("click", function(){
+      $(this).children().show()
+    })
+  }
+}
+
 var parser = function(){
   function uListify(toJoin){
     toJoin.unshift("<ul>")

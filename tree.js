@@ -1,53 +1,55 @@
 $(function(){
-  $('body').append(new parser().parseObject(data))
+  $('body').append(parser.parseObject(data))
   $('ul ul').hide()
-  new interactor().bind($('li'))
+  interactor.bind($('li'))
 })
-var interactor = function(){}
-
-interactor.prototype = {
-  bind: function(elem){
-    elem.on("click", function(){
-      $(this).children().show(500)
-    })
+var interactor = (function(){
+  return {
+    bind: function(elem){
+      elem.on("click", function(){
+        $(this).children().show(500)
+      })
+    }
   }
-}
+})()
 
-var parser = function(){
-  function uListify(toJoin){
+
+var parser = (function(){
+  var uListify = function(toJoin){
     toJoin.unshift("<ul>")
     toJoin.push("</ul>")
     return toJoin.join("")
   }
-  function listItemify(item){
+  var listItemify = function(item){
     item.unshift("<li>")
     item.push("</li>")
     return item
   }
-
-  this.parseObject = function(obj, inner){
-    var result = []
-    for (var key in obj){
-      result = result.concat(listItemify([key, this.parseArray(obj[key])]))
-    }
-    if (inner){
-      return result.join("")
-    } else {
+  return {
+    parseObject : function(obj, inner){
+      var result = []
+      for (var key in obj){
+        result = result.concat(listItemify([key, this.parseArray(obj[key])]))
+      }
+      if (inner){
+        return result.join("")
+      } else {
+        return uListify(result)
+      }
+    },
+    parseArray : function(arr){
+      var result = []
+      for (var i = 0; i < arr.length; i++){
+        if (typeof(arr[i]) == "object"){
+          result.push(this.parseObject(arr[i], true))
+        } else {
+          result = result.concat(listItemify([arr[i]]))
+        }
+      }
       return uListify(result)
     }
-  },
-  this.parseArray = function(arr){
-    var result = []
-    for (var i = 0; i < arr.length; i++){
-      if (typeof(arr[i]) == "object"){
-        result.push(this.parseObject(arr[i], true))
-      } else {
-        result = result.concat(listItemify([arr[i]]))
-      }
-    }
-    return uListify(result)
   }
-}
+})()
 
 
 
